@@ -19,9 +19,11 @@ class ForestInfo(object):
         self.active_node_count = [1] * self.forest_depth
 
     # Node object of format { "f":int, "l":int, "anc":int } expected
-    def update_active_node(self, json_node_info):
+
+    def update_active_node(self, json_node_info, forest_info):
+        print "Updating Forest Info: Active Nodes: " + str(forest_info.active_node_count)
         level = int(json_node_info["l"])
-        self.active_node_count[level] = self.active_node_count[level] + int(json_node_info["anc"])
+        self.active_node_count[level - 1] = self.active_node_count[level-1] + int(json_node_info["anc"])
 
 
 
@@ -47,7 +49,7 @@ def main():
         #Update Active Nodes
         print "updating node information at line " + line
         node_info = json.loads(line)
-        forest_info.update_active_node(node_info)
+        forest_info.update_active_node(node_info, forest_info)
 
     #Final Display
     print "Final Forest Info: Active Nodes: " + str(forest_info.active_node_count)
