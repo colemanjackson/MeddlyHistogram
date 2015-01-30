@@ -1,0 +1,40 @@
+{ "forest_id":1, "name":"forest name", "left": 1, "right": 1, "an":[0] }
+
+{ "f": 1, "l":1, "anc": -1 }
+{ "f": 1, "l":1, "anc": 1 }
+{ "f": 1, "l":1, "anc": 1 }
+{ "f": 1, "l":1, "anc": -1 }
+{ "f": 1, "l":1, "anc": 1 }
+__author__ = 'colemanjackson'
+import json
+import sys
+from pprint import pprint
+
+
+#Contains the default information about the forest about to be parsed
+class ForestInfo(object):
+
+    #initalize with default info
+    #parse_info:JSON Tree Object
+    def __init__(self, parse_info):
+        self.forest_depth = parse_info["left"] + parse_info["right"]
+        self.left = parse_info["left"]
+        self.right = parse_info["right"]
+        self.name = parse_info["name"]
+        self.id = parse_info["id"]
+        self.size = set(xrange(self.forest_depth))
+        self.active_node_count = dict.fromkeys(self.size)
+
+        for x in range(0, self.forest_depth):
+            self.active_node_count[x] = 0
+
+
+def main():
+    print "Logging: Started Main"
+    print "Reading from stdin:"
+    for line in sys.stdin:
+        print line
+
+
+#execute block
+main()

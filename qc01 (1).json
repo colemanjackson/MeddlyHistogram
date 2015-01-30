@@ -1,0 +1,3 @@
+{ forest_id=1, name="forest name", left=1, right=1, an=[0] }
+{ f=1, l=1, anc=1 }
+{ f=1, l=1, anc=-1 }
