@@ -34,12 +34,12 @@ class Logger(object):
         pass
 
     @staticmethod
-    def log_begin_message(self):
+    def log_begin_message():
         print "Logging: Started Main"
         print "Reading from stdin:"
 
     @staticmethod
-    def log_final_output(self, forest_info):
+    def log_final_output(forest_info):
         print "Final Forest Info: Active Nodes: " + str(forest_info.active_node_count)
         print "Final Forest Info: Forest Depth: " + str(forest_info.forest_depth)
         print "Final Forest Info: Forest Left: " + str(forest_info.left)
@@ -47,7 +47,7 @@ class Logger(object):
         print "Final Forest Info: Forest Left: " + str(forest_info.left)
 
     @staticmethod
-    def log_line_update(self, line):
+    def log_line_update(line):
         print "updating node information at line " + line
 
 
@@ -66,6 +66,7 @@ def animate_bar_plot():
         if first_time:
             JSON_Tree_Info = json.loads(line)
             forest_info = ForestInfo(JSON_Tree_Info)
+            print "range: " + str(range(forest_info.forest_depth))
             rects = plt.bar(range(forest_info.forest_depth), forest_info.active_node_count, align='center')
             first_time = False
             continue
@@ -89,7 +90,6 @@ def setup_backend(backend='TkAgg'):
 
     mpl.use(backend)  # do this before importing pyplot
     import matplotlib.pyplot as plt
-
     return plt
 
 
@@ -97,5 +97,5 @@ def setup_backend(backend='TkAgg'):
 plt = setup_backend()
 fig = plt.figure()
 win = fig.canvas.manager.window
-win.after(3, animate_bar_plot)
+win.after(10, animate_bar_plot)
 plt.show()
