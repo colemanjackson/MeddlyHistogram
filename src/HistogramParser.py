@@ -3,9 +3,13 @@ import json
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
+
+# CLASS BLOCK
 # Contains the default information about the forest about to be parsed
 class ForestInfo(object):
+
     # initalize with default info
     # parse_info:JSON Tree Object
     def __init__(self, parse_info):
@@ -15,7 +19,7 @@ class ForestInfo(object):
         self.right = int(parse_info["right"])
         self.name = parse_info["name"]
         self.id = int(parse_info["forest_id"])
-        self.active_node_count = [1] * self.forest_depth
+        self.active_node_count = [25] * self.forest_depth
 
     # Node object of format { "f":int, "l":int, "anc":int } expected
     # rects should be a bargraph object from matplotlib,
@@ -26,8 +30,15 @@ class ForestInfo(object):
         self.active_node_count[level - 1] = self.active_node_count[level - 1] + int(json_node_info["anc"])
         rects[level - 1].set_height(self.active_node_count[level - 1])
 
+    def reset_active_node_count(self):
+        self.active_node_count = [1] * self.forest_depth
 
-# Simple Logging Object to log events in program execution
+    def reset_all_visual_nodes(self, num, rects):
+
+        for rect in rects:
+            rect.set_height(num)
+
+# Simple Logging Object to log events in program execution to stdout
 class Logger(object):
 
     def __init__(self):
@@ -51,6 +62,7 @@ class Logger(object):
         print "updating node information at line " + line
 
 
+# MAIN PROGRAM EXECUTION BLOCK
 def animate_bar_plot():
     first_time = True
     forest_info = None
@@ -67,7 +79,9 @@ def animate_bar_plot():
             JSON_Tree_Info = json.loads(line)
             forest_info = ForestInfo(JSON_Tree_Info)
             print "range: " + str(range(forest_info.forest_depth))
-            rects = plt.bar(range(forest_info.forest_depth), forest_info.active_node_count, align='center')
+            rects = plt.bar(range(forest_info.forest_depth), forest_info.active_node_count, align='center') # todo make height a command-line argument
+            forest_info.reset_active_node_count()
+            forest_info.reset_all_visual_nodes(1, rects)
             first_time = False
             continue
 
@@ -76,6 +90,7 @@ def animate_bar_plot():
         node_info = json.loads(line)
         forest_info.update_active_node(node_info, forest_info, rects)
         fig.canvas.draw()
+        time.sleep(1)
 
     # Final Display
     log.log_final_output(forest_info)
